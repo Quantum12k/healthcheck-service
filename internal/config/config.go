@@ -8,12 +8,14 @@ import (
 
 	"github.com/Quantum12k/healthcheck-service/internal/healthcheck"
 	"github.com/Quantum12k/healthcheck-service/internal/logger"
+	"github.com/Quantum12k/healthcheck-service/internal/postgresql"
 )
 
 type (
 	Config struct {
-		Logger *logger.Config     `yaml:"logger"`
-		URLs   []healthcheck.URL  `yaml:"urls"`
+		Logger     logger.Config     `yaml:"logger"`
+		PostgreSQL postgresql.Config `yaml:"db"`
+		URLs       []healthcheck.URL `yaml:"urls"`
 	}
 )
 

@@ -1,0 +1,1 @@
+migrate -path . -database postgres://postgres:postgres@localhost:5432/healthcheck?sslmode=disable up

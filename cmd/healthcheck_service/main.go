@@ -15,6 +15,10 @@ import (
 )
 
 const (
+	SettingsFlagName = "settings"
+	URLsFlagName     = "urls"
+	ModeFlagName     = "mode"
+
 	DefaultSettingsConfigName = "../configs/settings.yml"
 	DefaultURLsConfigName     = "../configs/urls.yml"
 
@@ -60,17 +64,17 @@ func main() {
 				Action: app.run,
 				Flags: []cli.Flag{
 					&cli.StringFlag{
-						Name:  "settings",
+						Name:  SettingsFlagName,
 						Usage: "особый путь до файла настроек",
 						Value: DefaultSettingsConfigName,
 					},
 					&cli.StringFlag{
-						Name:  "urls",
+						Name:  URLsFlagName,
 						Usage: "особый путь до конфигурационного файла URL",
 						Value: DefaultURLsConfigName,
 					},
 					&cli.StringFlag{
-						Name:  "mode",
+						Name:  ModeFlagName,
 						Usage: "режим работы утилиты",
 						Value: SingleMode,
 					},
@@ -89,8 +93,8 @@ func main() {
 
 func (a *App) run(cliCtx *cli.Context) error {
 	cfg, err := config.New(
-		cliCtx.String("settings"),
-		cliCtx.String("urls"),
+		cliCtx.String(SettingsFlagName),
+		cliCtx.String(URLsFlagName),
 	)
 	if err != nil {
 		return fmt.Errorf("new config: %v", err)
@@ -99,17 +103,19 @@ func (a *App) run(cliCtx *cli.Context) error {
 	a.Cfg = cfg
 	a.Log = logger.New(cfg.Logger)
 
-	mode := cliCtx.String("mode")
+	mode := cliCtx.String(ModeFlagName)
+
+	ctx := cliCtx.Context
 
 	switch mode {
 	case SingleMode:
-		return a.single(cliCtx.Context)
+		return a.single(ctx)
 	case WithDBMode:
-		return a.withDB(cliCtx)
+		return a.withDB(ctx)
 	case ServerMode:
-		return a.server(cliCtx)
+		return a.server(ctx)
 	case APIMode:
-		return a.api(cliCtx)
+		return a.api(ctx)
 	default:
 		a.Log.Infof("no valid mode provided, got %s, exiting", mode)
 		return nil

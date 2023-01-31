@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/urfave/cli/v2"
+	"context"
 )
 
-func (a *App) server(cliCtx *cli.Context) error {
+func (a *App) server(ctx context.Context) error {
 
 	return nil
 }

@@ -29,8 +29,8 @@ type (
 	}
 
 	CheckResult struct {
-		URL    string
-		Result string
+		URL    string `db:"url"`
+		Result string `db:"result"`
 	}
 
 	Config struct {
@@ -97,7 +97,7 @@ urlLoop:
 }
 
 func handleURL(ctx context.Context, url URL) error {
-	resp, err := http_client.DoRequest(ctx, url.URL, time.Second)
+	resp, err := http_client.DoRequest(ctx, http.MethodGet, url.URL, nil, time.Second)
 	if err != nil {
 		return fmt.Errorf("unable to do request: %v", err)
 	}

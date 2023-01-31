@@ -21,7 +21,7 @@ type (
 	}
 )
 
-func New(cfg *Config) *zap.SugaredLogger {
+func New(cfg Config) *zap.SugaredLogger {
 	encoderConfig := zap.NewProductionEncoderConfig()
 
 	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder

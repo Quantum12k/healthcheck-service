@@ -6,3 +6,9 @@ logger:
   max_age_days: 30
   local_time: true
   compress: true # архивирование при превышении лимита файла
+db: # postgresql
+  db_name: healthcheck
+  db_host: localhost
+  db_port: 5432
+  db_user: postgres
+  db_password: postgres
