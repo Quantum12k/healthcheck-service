@@ -1,0 +1,12 @@
+urls:
+  - url: "http://ya.ru"
+    checks: ["status_code", "text"]
+    min_checks_cnt: 2
+  - url: "http://vk.com"
+    checks: ["status_code"]
+    min_checks_cnt: 1
+  - url: "http://mail.ru"
+    checks: ["status_code", "text"]
+    min_checks_cnt: 1
+
+
