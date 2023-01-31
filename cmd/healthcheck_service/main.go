@@ -24,7 +24,7 @@ const (
 
 	SingleMode = "single"
 	WithDBMode = "withDB"
-	ServerMode = "server"
+	CycleMode  = "cycle"
 	APIMode    = "api"
 )
 
@@ -112,8 +112,8 @@ func (a *App) run(cliCtx *cli.Context) error {
 		return a.single(ctx)
 	case WithDBMode:
 		return a.withDB(ctx)
-	case ServerMode:
-		return a.server(ctx)
+	case CycleMode:
+		return a.cycle(ctx)
 	case APIMode:
 		return a.api(ctx)
 	default:

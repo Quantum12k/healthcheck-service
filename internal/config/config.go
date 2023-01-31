@@ -13,9 +13,10 @@ import (
 
 type (
 	Config struct {
-		Logger     logger.Config     `yaml:"logger"`
-		PostgreSQL postgresql.Config `yaml:"db"`
-		URLs       []healthcheck.URL `yaml:"urls"`
+		Logger           logger.Config     `yaml:"logger"`
+		PostgreSQL       postgresql.Config `yaml:"db"`
+		CheckIntervalSec int               `yaml:"check_interval_sec"`
+		URLs             []healthcheck.URL `yaml:"urls"`
 	}
 )
 

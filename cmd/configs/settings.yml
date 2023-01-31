@@ -12,3 +12,4 @@ db: # postgresql
   db_port: 5432
   db_user: postgres
   db_password: postgres
+check_interval_sec: 10
