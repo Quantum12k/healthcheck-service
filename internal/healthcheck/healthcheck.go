@@ -45,15 +45,14 @@ func (r *CheckResult) String() string {
 func HandleURLs(ctx context.Context, urls []URL) []CheckResult {
 	results := make([]CheckResult, 0, len(urls))
 	resultCh := make(chan CheckResult)
-	resultWg := sync.WaitGroup{}
+	stopCh := make(chan struct{})
 
 	go func() {
-		resultWg.Add(1)
-		defer resultWg.Done()
-
 		for res := range resultCh {
 			results = append(results, res)
 		}
+
+		close(stopCh)
 	}()
 
 	checksWg := sync.WaitGroup{}
@@ -91,7 +90,7 @@ urlLoop:
 	checksWg.Wait()
 	close(resultCh)
 
-	resultWg.Wait()
+	<-stopCh
 
 	return results
 }
