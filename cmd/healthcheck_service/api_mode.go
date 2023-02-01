@@ -45,8 +45,11 @@ func (a *App) api(ctx context.Context) error {
 			results := healthcheck.HandleURLs(ctx, a.Cfg.URLs)
 
 			if err := db.CreateHealthCheckEntries(results); err != nil {
-				return fmt.Errorf("create healthcheck entry in DB: %v", err)
+				a.Log.Errorf("create healthcheck entry in DB: %v", err)
+				continue
 			}
+
+			a.Log.Debugf("created: %v", results)
 
 			// оповещаем при изменении статуса
 			for _, res := range results {
@@ -55,7 +58,8 @@ func (a *App) api(ctx context.Context) error {
 					body := bytes.NewReader([]byte(res.String()))
 
 					if _, err := http_client.DoRequest(ctx, http.MethodPost, notifyURL, body, time.Second); err != nil {
-						return fmt.Errorf("do notification post request: %v", err)
+						a.Log.Errorf("do notification post request: %v", err)
+						continue
 					}
 				}
 			}

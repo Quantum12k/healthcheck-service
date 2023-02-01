@@ -8,5 +8,3 @@ urls:
   - url: "http://mail.ru"
     checks: ["status_code", "text"]
     min_checks_cnt: 1
-
-

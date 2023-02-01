@@ -39,6 +39,8 @@ func (a *App) withDB(ctx context.Context) error {
 		return fmt.Errorf("create healthcheck entry in DB: %v", err)
 	}
 
+	a.Log.Debugf("created: %v", results)
+
 	// оповещаем при изменении статуса
 	for _, res := range results {
 		status, ok := a.cache.LastChecks.Get(res.URL)
