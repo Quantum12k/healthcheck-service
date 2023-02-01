@@ -10,6 +10,7 @@ import (
 	"github.com/urfave/cli/v2"
 	"go.uber.org/zap"
 
+	"github.com/Quantum12k/healthcheck-service/internal/app_cache"
 	"github.com/Quantum12k/healthcheck-service/internal/config"
 	"github.com/Quantum12k/healthcheck-service/internal/logger"
 )
@@ -30,9 +31,10 @@ const (
 
 type (
 	App struct {
-		Log *zap.SugaredLogger
-		Cfg *config.Config
-		cli *cli.App
+		Log   *zap.SugaredLogger
+		Cfg   *config.Config
+		cli   *cli.App
+		cache *app_cache.Cache
 	}
 )
 
@@ -52,7 +54,9 @@ func main() {
 		}
 	}()
 
-	app := App{}
+	app := App{
+		cache: app_cache.New(),
+	}
 
 	appCli := &cli.App{
 		Name:  "HealthCheck-service",

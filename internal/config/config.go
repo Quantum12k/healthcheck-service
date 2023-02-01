@@ -6,6 +6,7 @@ import (
 
 	"gopkg.in/yaml.v3"
 
+	"github.com/Quantum12k/healthcheck-service/internal/api"
 	"github.com/Quantum12k/healthcheck-service/internal/healthcheck"
 	"github.com/Quantum12k/healthcheck-service/internal/logger"
 	"github.com/Quantum12k/healthcheck-service/internal/postgresql"
@@ -16,6 +17,7 @@ type (
 		Logger           logger.Config     `yaml:"logger"`
 		PostgreSQL       postgresql.Config `yaml:"db"`
 		CheckIntervalSec int               `yaml:"check_interval_sec"`
+		Server           api.Config        `yaml:"server"`
 		URLs             []healthcheck.URL `yaml:"urls"`
 	}
 )
@@ -42,4 +44,14 @@ func New(settingsPath string, urlsPath string) (*Config, error) {
 	}
 
 	return cfg, nil
+}
+
+func (c *Config) URLsToSlice() []string {
+	urls := make([]string, 0, len(c.URLs))
+
+	for _, url := range c.URLs {
+		urls = append(urls, url.URL)
+	}
+
+	return urls
 }

@@ -13,3 +13,5 @@ db: # postgresql
   db_user: postgres
   db_password: postgres
 check_interval_sec: 10
+server:
+  port: 11000

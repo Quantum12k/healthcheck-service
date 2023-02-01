@@ -22,21 +22,14 @@ func (a *App) withDB(ctx context.Context) error {
 		return fmt.Errorf("get postgreSQL instance: %v", err)
 	}
 
-	urls := make([]string, 0, len(a.Cfg.URLs))
-	for _, url := range a.Cfg.URLs {
-		urls = append(urls, url.URL)
-	}
-
 	// забираем последние статусы по переданным url из БД
-	lastChecks, err := db.GetLastHealthCheckEntries(urls)
+	lastChecks, err := db.GetLastHealthCheckEntries(a.Cfg.URLsToSlice())
 	if err != nil {
 		return fmt.Errorf("get last checks: %v", err)
 	}
 
-	cached := make(map[string]string)
-
 	for _, check := range lastChecks {
-		cached[check.URL] = check.Result
+		a.cache.LastChecks.Add(check.URL, check.Result)
 	}
 
 	// получаем актуальные статусы
@@ -48,7 +41,7 @@ func (a *App) withDB(ctx context.Context) error {
 
 	// оповещаем при изменении статуса
 	for _, res := range results {
-		status, ok := cached[res.URL]
+		status, ok := a.cache.LastChecks.Get(res.URL)
 		if !ok || (status != res.Result) {
 			body := bytes.NewReader([]byte(res.String()))
 
