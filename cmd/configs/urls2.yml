@@ -1,0 +1,6 @@
+urls:
+  - url: "http://ya.ru"
+    checks: ["status_code", "text"]
+    min_checks_cnt: 2
+
+
