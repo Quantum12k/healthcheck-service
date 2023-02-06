@@ -4,7 +4,7 @@ import "sync"
 
 type (
 	ChecksCache struct {
-		sync.Mutex
+		sync.RWMutex
 		m map[string]string
 	}
 
@@ -16,7 +16,6 @@ type (
 func New() *Cache {
 	return &Cache{
 		LastChecks: &ChecksCache{
-			Mutex: sync.Mutex{},
 			m:     make(map[string]string),
 		},
 	}
@@ -37,8 +36,8 @@ func (c *ChecksCache) Delete(key string) {
 }
 
 func (c *ChecksCache) Get(key string) (string, bool) {
-	c.Lock()
-	defer c.Unlock()
+	c.RLock()
+	defer c.RUnlock()
 
 	res, ok := c.m[key]
 
@@ -46,8 +45,8 @@ func (c *ChecksCache) Get(key string) (string, bool) {
 }
 
 func (c *ChecksCache) GetMapCopy() map[string]string {
-	c.Lock()
-	defer c.Unlock()
+	c.RLock()
+	defer c.RUnlock()
 
 	res := make(map[string]string)
 
